@@ -179,6 +179,167 @@ function PassNode(parent, name)
 			this.add(this.color);
 			this.nextRow();
 			break;
+		case 'Bokeh':
+			this.addText("Aperture");
+			this.aperture = new Slider(this);
+			this.aperture.size.set(0, 18);
+			this.aperture.setRange(0, 1e-3);
+			this.aperture.setStep(1e-5);
+			this.aperture.setOnChange(function()
+			{
+				Editor.addAction(new ChangeAction(self.pass, "aperture", self.aperture.getValue()));
+			});
+			this.add(this.aperture);
+			this.nextRow();
+
+			this.addText(Locale.focus);
+			this.focus = new NumberBox(this);
+			this.focus.size.set(0, 18);
+			this.focus.setStep(1e-4);
+			this.focus.setOnChange(function()
+			{
+				Editor.addAction(new ChangeAction(self.pass, "focus", self.focus.getValue()));
+			});
+			this.add(this.focus);
+			this.nextRow();
+
+			this.addText("Max Blur");
+			this.maxblur = new Slider(this);
+			this.maxblur.size.set(0, 18);
+			this.maxblur.setRange(0, 3e-1);
+			this.maxblur.setStep(1e-5);
+			this.maxblur.setOnChange(function()
+			{
+				Editor.addAction(new ChangeAction(self.pass, "maxblur", self.maxblur.getValue()));
+			});
+			this.add(this.maxblur);
+			this.nextRow();
+			break;
+		case 'Film':
+			this.addText("Grayscale");
+			this.grayscale = new CheckBox(this);
+			this.grayscale.size.set(18, 18);
+			this.grayscale.setOnChange(function()
+			{
+				Editor.addAction(new ChangeAction(self.pass, "grayscale", self.grayscale.getValue()));
+			});
+			this.add(this.grayscale);
+			this.nextRow();
+		
+			this.addText("Noise");
+			this.noiseIntensity = new NumberBox(this);
+			this.noiseIntensity.size.set(60, 18);
+			this.noiseIntensity.setOnChange(function()
+			{
+				Editor.addAction(new ChangeAction(self.pass, "noiseIntensity", self.noiseIntensity.getValue()));
+			});
+			this.add(this.noiseIntensity);
+			this.nextRow();
+		
+			this.addText(Locale.intensity);
+			this.scanlinesIntensity = new NumberBox(this);
+			this.scanlinesIntensity.size.set(60, 18);
+			this.scanlinesIntensity.setOnChange(function()
+			{
+				Editor.addAction(new ChangeAction(self.pass, "scanlinesIntensity", self.scanlinesIntensity.getValue()));
+			});
+			this.add(this.scanlinesIntensity);
+			this.nextRow();
+		
+			this.addText("Scanlines");
+			this.scanlinesCount = new NumberBox(this);
+			this.scanlinesCount.size.set(60, 18);
+			this.scanlinesCount.setOnChange(function()
+			{
+				Editor.addAction(new ChangeAction(self.pass, "scanlinesCount", self.scanlinesCount.getValue()));
+			});
+			this.add(this.scanlinesCount);
+			this.nextRow();
+			break;
+		case 'SSAO':
+			this.addText("Only AO");
+			this.onlyAO = new CheckBox(this);
+			this.onlyAO.size.set(18, 18);
+			this.onlyAO.setOnChange(function()
+			{
+				Editor.addAction(new ChangeAction(self.pass, "onlyAO", self.onlyAO.getValue()));
+			});
+			this.add(this.onlyAO);
+			this.nextRow();
+
+			this.addText(Locale.radius);
+			this.radius = new NumberBox(this);
+			this.radius.size.set(60, 18);
+			this.radius.setOnChange(function()
+			{
+				Editor.addAction(new ChangeAction(self.pass, "radius", self.radius.getValue()));
+			});
+			this.add(this.radius);
+			this.nextRow();
+
+			this.addText("Clamp");
+			this.aoClamp = new NumberBox(this);
+			this.aoClamp.size.set(60, 18);
+			this.aoClamp.setOnChange(function()
+			{
+				Editor.addAction(new ChangeAction(self.pass, "aoClamp", self.aoClamp.getValue()));
+			});
+			this.add(this.aoClamp);
+			this.nextRow();
+
+			this.addText("Lum. Influence");
+			this.lumInfluence = new NumberBox(this);
+			this.lumInfluence.size.set(60, 18);
+			this.lumInfluence.setOnChange(function()
+			{
+				Editor.addAction(new ChangeAction(self.pass, "lumInfluence", self.lumInfluence.getValue()));
+			});
+			this.add(this.lumInfluence);
+			this.nextRow();
+			break;
+		case 'SSAONOH':
+			this.addText(Locale.kernelRadius);
+			this.kernelRadius = new NumberBox(this);
+			this.kernelRadius.size.set(0, 18);
+			this.kernelRadius.setStep(1.0);
+			this.kernelRadius.setOnChange(function()
+			{
+				Editor.addAction(new ChangeAction(self.pass, "kernelRadius", self.kernelRadius.getValue()));
+			});
+			this.add(this.kernelRadius);
+			this.nextRow();
+		
+			this.addText(Locale.kernelSize);
+			this.kernelSize = new NumberBox(this);
+			this.kernelSize.size.set(0, 18);
+			this.kernelSize.setStep(1.0);
+			this.kernelSize.setOnChange(function()
+			{
+				Editor.addAction(new ChangeAction(self.pass, "kernelSize", self.kernelSize.getValue()));
+			});
+			this.add(this.kernelSize);
+			this.nextRow();
+		
+			this.addText(Locale.minDistance);
+			this.minDistance = new NumberBox(this);
+			this.minDistance.size.set(0, 18);
+			this.minDistance.setOnChange(function()
+			{
+				Editor.addAction(new ChangeAction(self.pass, "minDistance", self.minDistance.getValue()));
+			});
+			this.add(this.minDistance);
+			this.nextRow();
+		
+			this.addText(Locale.maxDistance);
+			this.maxDistance = new NumberBox(this);
+			this.maxDistance.size.set(0, 18);
+			this.maxDistance.setOnChange(function()
+			{
+				Editor.addAction(new ChangeAction(self.pass, "maxDistance", self.maxDistance.getValue()));
+			});
+			this.add(this.maxDistance);
+			this.nextRow();
+		break;
 	}
 
 }
@@ -223,6 +384,29 @@ PassNode.prototype.setPass = function(pass)
 		break;
 		case 'Colorify':
 			this.color.setValue(this.pass.color.r, this.pass.color.g, this.pass.color.b);
+		break;
+		case 'Bokeh':
+			this.aperture.setValue(pass.aperture);
+			this.focus.setValue(pass.focus);
+			this.maxblur.setValue(pass.maxblur);
+			break;
+		case 'Film':
+			this.grayscale.setValue(pass.grayscale);
+			this.noiseIntensity.setValue(pass.noiseIntensity);
+			this.scanlinesIntensity.setValue(pass.scanlinesIntensity);
+			this.scanlinesCount.setValue(pass.scanlinesCount);
+			break;
+		case 'SSAO':
+			this.radius.setValue(pass.radius);
+			this.onlyAO.setValue(pass.onlyAO);
+			this.aoClamp.setValue(pass.aoClamp);
+			this.lumInfluence.setValue(pass.lumInfluence);
+			break;
+		case 'SSAONOH':
+			this.kernelRadius.setValue(pass.kernelRadius);
+			this.minDistance.setValue(pass.minDistance);
+			this.maxDistance.setValue(pass.maxDistance);
+			this.kernelSize.setValue(pass.kernelSize);
 		break;
 	}
 };
