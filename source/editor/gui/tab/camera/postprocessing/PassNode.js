@@ -4,12 +4,17 @@ import {Editor} from "../../../../Editor.js";
 import {TableForm} from "../../../../components/TableForm.js";
 import {CheckBox} from "../../../../components/input/CheckBox.js";
 import {ButtonText} from "../../../../components/buttons/ButtonText.js";
+import { NumberBox } from "../../../../components/input/NumberBox.js";
+import { Slider } from "../../../../components/input/Slider.js";
+import { ColorChooser } from "../../../../components/input/ColorChooser.js";
 
 function PassNode(parent, name)
 {
 	TableForm.call(this, parent);
 
 	this.element.style.overflow = "hidden"; 
+
+	this.name = name;
 	
 	this.defaultTextWidth = 60;
 	this.position.set(10, 5);
@@ -88,6 +93,94 @@ function PassNode(parent, name)
 		self.composer.removePass(self.pass);
 		self.editor.updatePostNodes();
 	});
+
+	// custom pass parameters
+	console.log('settings for', name);
+	switch(name){
+		case 'UnrealBloom':
+			this.addText("Strength");
+			this.strength = new NumberBox(this);
+			this.strength.size.set(60, 18);
+			this.strength.setOnChange(function()
+			{
+				Editor.addAction(new ChangeAction(self.pass, "strength", self.strength.getValue()));
+			});
+			this.add(this.strength);
+			this.nextRow();
+
+			this.addText(Locale.radius);
+			this.radius = new NumberBox(this);
+			this.radius.size.set(60, 18);
+			this.radius.setOnChange(function()
+			{
+				Editor.addAction(new ChangeAction(self.pass, "radius", self.radius.getValue()));
+			});
+			this.add(this.radius);
+			this.nextRow();
+
+			this.addText("Threshold");
+			this.threshold = new NumberBox(this);
+			this.threshold.size.set(60, 18);
+			this.threshold.setOnChange(function()
+			{
+				Editor.addAction(new ChangeAction(self.pass, "threshold", self.threshold.getValue()));
+			});
+			this.add(this.threshold);
+			this.nextRow();
+
+			this.addText(Locale.smooth);
+			this.smooth = new NumberBox(this);
+			this.smooth.size.set(60, 18);
+			this.smooth.setOnChange(function()
+			{
+				Editor.addAction(new ChangeAction(self.pass, "smooth", self.smooth.getValue()));
+			});
+			this.add(this.smooth);
+			this.nextRow();
+			break;
+		case 'HueSaturation':
+			this.addText("Hue");
+			this.hue = new Slider(this);
+			this.hue.size.set(80, 18);
+			this.hue.setStep(0.05);
+			this.hue.setRange(-1, 1);
+			this.hue.setOnChange(function()
+			{
+				Editor.addAction(new ChangeAction(self.pass, "hue", self.hue.getValue()));
+			});
+			this.add(this.hue);
+			this.nextRow();
+
+			this.addText("Saturation");
+			this.saturation = new Slider(this);
+			this.saturation.size.set(80, 18);
+			this.saturation.setStep(0.05);
+			this.saturation.setRange(-1, 1);
+			this.saturation.setOnChange(function()
+			{
+				Editor.addAction(new ChangeAction(self.pass, "saturation", self.saturation.getValue()));
+			});
+			this.add(this.saturation);
+			this.nextRow();
+			break;
+		case 'Colorify':
+			this.addText(Locale.color);
+			this.color = new ColorChooser(this);
+			this.color.size.set(80, 18);
+			this.color.setOnChange(function()
+			{
+				var value = self.color.getValue();
+
+				var color = self.pass.color.clone();
+				color.setRGB(value.r, value.g, value.b);
+
+				Editor.addAction(new ChangeAction(self.pass, "color", color));
+			});
+			this.add(this.color);
+			this.nextRow();
+			break;
+	}
+
 }
 
 PassNode.prototype = Object.create(TableForm.prototype);
@@ -116,6 +209,22 @@ PassNode.prototype.setPass = function(pass)
 	this.enabled.setValue(pass.enabled);
 	this.clear.setValue(pass.clear);
 	this.renderToScreen.setValue(pass.renderToScreen);
+
+	switch(this.name){
+		case 'UnrealBloom':
+			this.strength.setValue(pass.strength);
+			this.radius.setValue(pass.radius);
+			this.threshold.setValue(pass.threshold);
+			this.smooth.setValue(pass.smooth);
+		break;
+		case 'HueSaturation':
+			this.hue.setValue(pass.hue);
+			this.saturation.setValue(pass.saturation);
+		break;
+		case 'Colorify':
+			this.color.setValue(this.pass.color.r, this.pass.color.g, this.pass.color.b);
+		break;
+	}
 };
 
 PassNode.prototype.setComposer = function(composer)
