@@ -42,6 +42,7 @@ import {Text} from "../../../../components/Text.js";
 import {Component} from "../../../../components/Component.js";
 import {ButtonDrawer} from "../../../../components/buttons/ButtonDrawer.js";
 import { PythonScript } from "../../../../../core/objects/script/PythonScript.js";
+import { Reflector } from "../../../../../core/objects/misc/Reflector.js";
 
 /**
  * Side bar is presented in the editor to add more objects to the scene.
@@ -581,6 +582,25 @@ return target.set(x, y, z);`;
 
 	effects.updateOptions();
 
+	// Reflector Geometry
+	effects.addOption(Global.FILE_PATH + "icons/misc/copy.png", function()
+	{
+		var geometry = new THREE.PlaneBufferGeometry( 10, 10 );
+		var model = new Reflector( geometry, {
+			clipBias: 0.003,
+			textureWidth: window.innerWidth * window.devicePixelRatio,
+			textureHeight: window.innerHeight * window.devicePixelRatio,
+			color: 0x777777
+		} );
+
+		model.name = "reflector";
+		model.rotateX( - Math.PI / 2 );
+		
+		Editor.addObject(model, self.editor.scene);
+	}, 'Reflector');
+
+	effects.updateOptions();
+
 	// Physics
 	var physics = new ButtonDrawer(this);
 	physics.setImage(Global.FILE_PATH + "icons/misc/physics.png");
@@ -651,7 +671,7 @@ return target.set(x, y, z);`;
 	{
 		Editor.addObject(new FirstPersonControls(), self.editor.scene);
 	}, Locale.firstPersonControls);
-
+	
 	controls.updateOptions();
 };
 
