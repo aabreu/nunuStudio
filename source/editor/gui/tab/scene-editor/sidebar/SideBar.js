@@ -585,13 +585,7 @@ return target.set(x, y, z);`;
 	// Reflector Geometry
 	effects.addOption(Global.FILE_PATH + "icons/misc/copy.png", function()
 	{
-		var geometry = new THREE.PlaneBufferGeometry( 10, 10 );
-		var model = new Reflector( geometry, {
-			clipBias: 0.003,
-			textureWidth: window.innerWidth * window.devicePixelRatio,
-			textureHeight: window.innerHeight * window.devicePixelRatio,
-			color: 0x777777
-		} );
+		var model = new Reflector();
 
 		model.name = "reflector";
 		model.rotateX( - Math.PI / 2 );

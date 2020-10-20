@@ -129,6 +129,8 @@ export {Group} from "./objects/misc/Group.js";
 export {LensFlare} from "./objects/misc/LensFlare.js";
 export {HTMLView} from "./objects/misc/HTMLView.js";
 
+export {Reflector} from "./objects/misc/Reflector.js";
+
 export {OrbitControls} from "./objects/controls/OrbitControls.js";
 export {FirstPersonControls} from "./objects/controls/FirstPersonControls.js";
 

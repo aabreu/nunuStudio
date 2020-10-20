@@ -41,6 +41,7 @@ import {FontLoader} from "./FontLoader.js";
 import {AudioLoader} from "./AudioLoader.js";
 import {TextureLoader} from "./TextureLoader.js";
 import {VideoLoader} from "./VideoLoader.js";
+import { Reflector } from "../objects/misc/Reflector.js";
 
 /**
  * Objectloader can be used to load external objects from files.
@@ -483,6 +484,9 @@ ObjectLoader.prototype.parseObject = function(data)
 				object.addFlare(this.getTexture(data.elements[i].texture), data.elements[i].size, data.elements[i].distance, new Color(data.elements[i].color));
 			}
 
+			break;
+		case "Reflector":
+			object = new Reflector();
 			break;
 
 		case "TextMesh":

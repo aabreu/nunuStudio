@@ -12,9 +12,19 @@ import {
 	Vector3,
 	Vector4,
 	WebGLRenderTarget,
+	Object3D,
 } from "three";
 
-var Reflector = function ( geometry, options ) {
+var Reflector = function ( ) {
+
+	var geometry = new THREE.PlaneBufferGeometry( 10, 10 );
+	
+	var options = {
+		clipBias: 0.003,
+		textureWidth: window.innerWidth * window.devicePixelRatio,
+		textureHeight: window.innerHeight * window.devicePixelRatio,
+		color: 0x777777
+	};
 
 	Mesh.call( this, geometry );
 
@@ -198,7 +208,14 @@ var Reflector = function ( geometry, options ) {
 };
 
 Reflector.prototype = Object.create( Mesh.prototype );
-Reflector.prototype.constructor = Reflector;
+// Reflector.prototype.constructor = Reflector;
+
+Reflector.prototype.toJSON = function(meta)
+{
+	var data = Object3D.prototype.toJSON.call(this, meta);
+	
+	return data;
+};
 
 Reflector.ReflectorShader = {
 
