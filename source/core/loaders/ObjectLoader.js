@@ -486,7 +486,7 @@ ObjectLoader.prototype.parseObject = function(data)
 
 			break;
 		case "Reflector":
-			object = new Reflector();
+			object = new Reflector(data.color);
 			break;
 
 		case "TextMesh":

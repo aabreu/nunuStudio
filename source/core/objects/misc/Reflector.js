@@ -15,16 +15,18 @@ import {
 	Object3D,
 } from "three";
 
-var Reflector = function ( ) {
-
+var Reflector = function ( c ) {
+	
 	var geometry = new THREE.PlaneBufferGeometry( 10, 10 );
 	
 	var options = {
 		clipBias: 0.003,
 		textureWidth: window.innerWidth * window.devicePixelRatio,
 		textureHeight: window.innerHeight * window.devicePixelRatio,
-		color: 0x777777
+		// color: 0x777777
 	};
+
+	this.color = c;
 
 	Mesh.call( this, geometry );
 
@@ -35,7 +37,7 @@ var Reflector = function ( ) {
 
 	options = options || {};
 
-	var color = ( options.color !== undefined ) ? new Color( options.color ) : new Color( 0x7F7F7F );
+	// var color = ( options.color !== undefined ) ? new Color( options.color ) : new Color( 0x7F7F7F );
 	var textureWidth = options.textureWidth || 512;
 	var textureHeight = options.textureHeight || 512;
 	var clipBias = options.clipBias || 0;
@@ -79,13 +81,17 @@ var Reflector = function ( ) {
 	} );
 
 	material.uniforms[ "tDiffuse" ].value = renderTarget.texture;
-	material.uniforms[ "color" ].value = color;
 	material.uniforms[ "textureMatrix" ].value = textureMatrix;
-
+	// material.uniforms[ "color" ].value = color;
+	
 	this.material = material;
-
+	
 	this.onBeforeRender = function ( renderer, scene, camera ) {
 		// console.log(camera);
+		
+		var color = ( scope.color !== undefined ) ? new Color( scope.color ) : new Color( 0x7F7F7F );
+		scope.material.uniforms[ "color" ].value = color;
+
 		reflectorWorldPosition.setFromMatrixPosition( scope.matrixWorld );
 		cameraWorldPosition.setFromMatrixPosition( camera.matrixWorld );
 
@@ -213,7 +219,7 @@ Reflector.prototype = Object.create( Mesh.prototype );
 Reflector.prototype.toJSON = function(meta)
 {
 	var data = Object3D.prototype.toJSON.call(this, meta);
-	
+	data.object.color = this.color;
 	return data;
 };
 
