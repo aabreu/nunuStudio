@@ -82,15 +82,13 @@ var Reflector = function ( c ) {
 
 	material.uniforms[ "tDiffuse" ].value = renderTarget.texture;
 	material.uniforms[ "textureMatrix" ].value = textureMatrix;
-	// material.uniforms[ "color" ].value = color;
+	material.uniforms[ "color" ].value = ( scope.color !== undefined ) ? new Color( scope.color ) : new Color( 0x7F7F7F );;
 	
 	this.material = material;
 	
 	this.onBeforeRender = function ( renderer, scene, camera ) {
-		// console.log(camera);
-		
-		var color = ( scope.color !== undefined ) ? new Color( scope.color ) : new Color( 0x7F7F7F );
-		scope.material.uniforms[ "color" ].value = color;
+
+		scope.material.uniforms[ "color" ].value = ( scope.color !== undefined ) ? new Color( scope.color ) : new Color( 0x7F7F7F );;
 
 		reflectorWorldPosition.setFromMatrixPosition( scope.matrixWorld );
 		cameraWorldPosition.setFromMatrixPosition( camera.matrixWorld );
