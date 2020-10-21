@@ -15,7 +15,7 @@ import {
 	Object3D,
 } from "three";
 
-var Reflector = function ( c ) {
+var Reflector = function ( material ) {
 	
 	var geometry = new THREE.PlaneBufferGeometry( 10, 10 );
 	
@@ -26,7 +26,7 @@ var Reflector = function ( c ) {
 		// color: 0x777777
 	};
 
-	this.color = c;
+	// this.color = c;
 
 	Mesh.call( this, geometry );
 
@@ -74,7 +74,8 @@ var Reflector = function ( c ) {
 
 	}
 
-	var material = new ShaderMaterial( {
+	var material = material || new ShaderMaterial( {
+		name:'ReflectorMaterial',
 		uniforms: UniformsUtils.clone( shader.uniforms ),
 		fragmentShader: shader.fragmentShader,
 		vertexShader: shader.vertexShader
@@ -82,13 +83,13 @@ var Reflector = function ( c ) {
 
 	material.uniforms[ "tDiffuse" ].value = renderTarget.texture;
 	material.uniforms[ "textureMatrix" ].value = textureMatrix;
-	material.uniforms[ "color" ].value = ( scope.color !== undefined ) ? new Color( scope.color ) : new Color( 0x7F7F7F );;
+	// material.uniforms[ "color" ].value = ( scope.color !== undefined ) ? new Color( scope.color ) : new Color( 0x7F7F7F );
 	
 	this.material = material;
 	
 	this.onBeforeRender = function ( renderer, scene, camera ) {
 
-		scope.material.uniforms[ "color" ].value = ( scope.color !== undefined ) ? new Color( scope.color ) : new Color( 0x7F7F7F );;
+		// scope.material.uniforms[ "color" ].value = ( scope.color !== undefined ) ? new Color( scope.color ) : new Color( 0x7F7F7F );;
 
 		reflectorWorldPosition.setFromMatrixPosition( scope.matrixWorld );
 		cameraWorldPosition.setFromMatrixPosition( camera.matrixWorld );
@@ -226,10 +227,14 @@ Reflector.ReflectorShader = {
 	uniforms: {
 
 		'color': {
-			value: null
+			value: new Color(0xffffff)
 		},
 
 		'tDiffuse': {
+			value: null
+		},
+
+		'map': {
 			value: null
 		},
 
@@ -242,11 +247,11 @@ Reflector.ReflectorShader = {
 	vertexShader: [
 		'uniform mat4 textureMatrix;',
 		'varying vec4 vUv;',
+		'varying vec4 aUv;',
 
 		'void main() {',
-
-		'	vUv = textureMatrix * vec4( position, 1.0 );',
-
+		'	aUv = vec4( position, 1.0 );',
+		'	vUv = textureMatrix * aUv;',
 		'	gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );',
 
 		'}'
@@ -255,6 +260,8 @@ Reflector.ReflectorShader = {
 	fragmentShader: [
 		'uniform vec3 color;',
 		'uniform sampler2D tDiffuse;',
+		'uniform sampler2D map;',
+		'varying vec4 aUv;',
 		'varying vec4 vUv;',
 
 		'float blendOverlay( float base, float blend ) {',
@@ -272,11 +279,16 @@ Reflector.ReflectorShader = {
 		'void main() {',
 
 		'	vec4 base = texture2DProj( tDiffuse, vUv );',
-		'	gl_FragColor = vec4( blendOverlay( base.rgb, color ), 1.0 );',
-
+		'	vec4 mBase = texture2DProj( map, aUv );',
+		'	//gl_FragColor = vec4( blendOverlay( base.rgb, color ), 1.0 );',
+		'	//vec4 reflection = vec4( blendOverlay( mBase.rgb, base.rgb ), 1.0 );',
+		'	//gl_FragColor = vec4( blendOverlay( reflection.rgb, color ), 1.0 );',
+		'	gl_FragColor = vec4( color * blendOverlay(base.rgb, mBase.rgb), 1.0);',
 		'}'
 	].join( '\n' )
 };
 
+// vec4 reflection = vec4( blendOverlay( base.rgb, color ), 1.0 );
+// gl_FragColor = reflection + mBase;
 
 export { Reflector };

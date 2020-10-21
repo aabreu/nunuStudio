@@ -1,4 +1,4 @@
-import {PerspectiveCamera, Scene, Object3D, PointLight, AmbientLight, Mesh, FrontSide, BackSide, DoubleSide, NoBlending, NormalBlending, AdditiveBlending, SubtractiveBlending, MultiplyBlending} from "three";
+import {Color, PerspectiveCamera, Scene, Object3D, PointLight, AmbientLight, Mesh, FrontSide, BackSide, DoubleSide, NoBlending, NormalBlending, AdditiveBlending, SubtractiveBlending, MultiplyBlending} from "three";
 import {Locale} from "../../../locale/LocaleManager.js";
 import {Sky} from "../../../../core/objects/misc/Sky.js";
 import {Mouse} from "../../../../core/input/Mouse.js";
@@ -16,6 +16,8 @@ import {CheckBox} from "../../../components/input/CheckBox.js";
 import {DualDivision} from "../../../components/containers/DualDivision.js";
 import {DualContainer} from "../../../components/containers/DualContainer.js";
 import {MaterialEditor} from "./MaterialEditor.js";
+import { TextureForm } from "../../../components/input/TextureForm.js";
+import { ColorChooser } from "../../../components/input/ColorChooser.js";
 
 
 function ShaderMaterialEditor(parent, closeable, container, index)
@@ -252,6 +254,36 @@ function ShaderMaterialEditor(parent, closeable, container, index)
 	this.form.add(this.wireframe);
 	this.form.nextRow();
 
+	// Color
+	this.form.addText(Locale.color);
+	this.color = new ColorChooser(this.form);
+	this.color.size.set(100, 18);
+	this.color.setOnChange(function()
+	{
+		console.log(self.material);
+		console.log(self.color.getValueHex());
+		
+		self.material.uniforms['color'].value = new Color(self.color.getValueHex());
+		console.log(self.material);
+
+		self.material.needsUpdate = true;
+	});
+	this.form.add(this.color);
+	this.form.nextRow();
+	
+	// Texture map
+	this.form.addText(Locale.textureMap);
+	this.map = new TextureForm(this.form);
+	this.map.size.set(0, 100);
+	this.map.setOnChange(function()
+	{
+		self.material.uniforms['map'].value = self.map.getValue();
+		// Editor.addAction(new ChangeAction(self.material, "map", self.map.getValue()));
+		self.material.needsUpdate = true;
+	});
+	this.form.add(this.map);
+	this.form.nextRow();
+
 	// Fragment tab
 	this.fragmentShader = this.tab.addTab(CodeEditor, false);
 	this.fragmentShader.setName(Locale.fragment);
@@ -299,6 +331,10 @@ ShaderMaterialEditor.prototype.attach = function(material, asset)
 	// Shader
 	this.fragmentShader.setText(material.fragmentShader);
 	this.vertexShader.setText(material.vertexShader);
+
+	//
+	this.color.setValue(material.uniforms['color'].r, material.uniforms['color'].g, material.uniforms['color'].b);
+	this.map.setValue(material.map);
 };
 
 ShaderMaterialEditor.prototype.updateSize = function()

@@ -585,9 +585,10 @@ return target.set(x, y, z);`;
 	// Reflector Geometry
 	effects.addOption(Global.FILE_PATH + "icons/misc/copy.png", function()
 	{
-		var model = new Reflector(0x777777);
+		var model = new Reflector();
 
 		model.name = "reflector";
+
 		model.rotateX( - Math.PI / 2 );
 		
 		Editor.addObject(model, self.editor.scene);
