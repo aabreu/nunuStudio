@@ -133,6 +133,7 @@ export {Reflector} from "./objects/misc/Reflector.js";
 
 export {OrbitControls} from "./objects/controls/OrbitControls.js";
 export {FirstPersonControls} from "./objects/controls/FirstPersonControls.js";
+export {PlayerControls} from "./objects/controls/PlayerControls.js";
 
 export {Program} from "./objects/Program.js";
 export {Scene} from "./objects/Scene.js";

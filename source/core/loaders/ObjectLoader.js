@@ -42,6 +42,7 @@ import {AudioLoader} from "./AudioLoader.js";
 import {TextureLoader} from "./TextureLoader.js";
 import {VideoLoader} from "./VideoLoader.js";
 import { Reflector } from "../objects/misc/Reflector.js";
+import { PlayerControls } from "../objects/controls/PlayerControls.js";
 
 /**
  * Objectloader can be used to load external objects from files.
@@ -486,8 +487,6 @@ ObjectLoader.prototype.parseObject = function(data)
 
 			break;
 		case "Reflector":
-			console.log("object loader reflector");
-			console.log(data);
 			object = new Reflector(this.getMaterial(data.material));
 			break;
 
@@ -621,6 +620,9 @@ ObjectLoader.prototype.parseObject = function(data)
 				object.vector.fromArray(data.vector);
 			}
 
+			break;
+		case "PlayerControls":
+			object = new PlayerControls(data.acceleration);
 			break;
 				
 		case "Scene":

@@ -57,6 +57,8 @@ import {PerspectiveCameraInspector} from "./objects/cameras/PerspectiveCameraIns
 import {OrthographicCameraInspector} from "./objects/cameras/OrthographicCameraInspector.js";
 import {AudioEmitterInspector} from "./objects/audio/AudioEmitterInspector.js";
 import {MaterialInspector} from "./materials/MaterialInspector.js";
+import { PlayerControls } from "../../../../core/Main.js";
+import { PlayerControlsInspector } from "./objects/controls/PlayerControlsInspector.js";
 // import {ReflectorInspector} from "./objects/misc/ReflectorInspector.js";
 // import { Reflector } from "../../../../core/Main.js";
 
@@ -265,6 +267,10 @@ InspectorContainer.prototype.updateSelection = function()
 		else if (object instanceof FirstPersonControls)
 		{
 			this.panel = new FirstPersonControlsInspector(this, object);
+		}
+		else if (object instanceof PlayerControls)
+		{
+			this.panel = new PlayerControlsInspector(this, object);
 		}
 		else
 		{

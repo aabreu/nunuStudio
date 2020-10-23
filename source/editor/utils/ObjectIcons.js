@@ -76,6 +76,7 @@ ObjectIcons.icons = new Map([
 	["LensFlare", ObjectIcons.path + "misc/flare.png"],
 	["OrbitControls", ObjectIcons.path + "misc/orbit.png"],
 	["FirstPersonControls", ObjectIcons.path + "misc/crosshair.png"],
+	["PlayerControls", ObjectIcons.path + "misc/animation.png"],
 	["Reflector", ObjectIcons.path + "misc/copy.png"]
 ]);
 

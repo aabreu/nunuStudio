@@ -43,6 +43,7 @@ import {Component} from "../../../../components/Component.js";
 import {ButtonDrawer} from "../../../../components/buttons/ButtonDrawer.js";
 import { PythonScript } from "../../../../../core/objects/script/PythonScript.js";
 import { Reflector } from "../../../../../core/objects/misc/Reflector.js";
+import {PlayerControls} from "../../../../../core/objects/controls/PlayerControls.js";
 
 /**
  * Side bar is presented in the editor to add more objects to the scene.
@@ -666,6 +667,12 @@ return target.set(x, y, z);`;
 	{
 		Editor.addObject(new FirstPersonControls(), self.editor.scene);
 	}, Locale.firstPersonControls);
+	
+	// Player controls
+	controls.addOption(Global.FILE_PATH + "icons/misc/animation.png", function()
+	{
+		Editor.addObject(new PlayerControls(1), self.editor.scene);
+	}, 'PlayerControls');
 	
 	controls.updateOptions();
 };
